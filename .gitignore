@@ -1,0 +1,12 @@
+# PyInstaller 构建缓存（每次重建会自动再生，无需提交）
+build_exe/build/
+
+# 打包产物：exe 通过 GitHub Releases 分发，不进仓库
+build_exe/dist/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 项目本地工作记忆，不公开
+.workbuddy/

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圣经提词器 · 使用说明书</title>
+<style>
+  :root{
+    --ink-0:#17130f; --ink-1:#1f1a15; --ink-2:#2a231c;
+    --paper:#efe7d6; --paper-soft:#cfc4ad;
+    --gold:#d9b877; --gold-soft:#b89a5e; --hair:rgba(217,184,119,.22);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(120% 90% at 50% 0%, #221c16 0%, var(--ink-0) 60%);
+    color:var(--paper);
+    font-family:"Source Han Serif SC","Songti SC",STSong,"SimSun",Georgia,serif;
+    line-height:1.85; font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    padding:42px 18px 64px;
+  }
+  .sheet{
+    max-width:760px; margin:0 auto;
+    background:linear-gradient(180deg, rgba(42,35,28,.55), rgba(23,19,15,.55));
+    border:1px solid var(--hair); border-radius:14px;
+    padding:46px 46px 40px;
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+  }
+  h1{
+    text-align:center; margin:0 0 4px; font-weight:600;
+    font-size:30px; letter-spacing:3px;
+  }
+  .sub{ text-align:center; color:var(--gold-soft); font-size:14px; letter-spacing:2px; margin-bottom:6px;}
+  .rule{ height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:22px 0 30px; position:relative; overflow:hidden;}
+  .rule::after{ content:""; position:absolute; top:0; left:-30%; width:30%; height:100%;
+    background:linear-gradient(90deg,transparent,#fff4d8,transparent); animation:sweep 4.5s linear infinite;}
+  @keyframes sweep{0%{left:-30%}100%{left:130%}}
+  h2{
+    font-size:19px; color:var(--gold); font-weight:600; letter-spacing:1.5px;
+    margin:30px 0 12px; padding-left:12px; border-left:3px solid var(--gold-soft);
+  }
+  p{ margin:8px 0; color:var(--paper-soft);}
+  .lead{ color:var(--paper); }
+  ul{ margin:8px 0; padding-left:22px; color:var(--paper-soft);}
+  li{ margin:6px 0; }
+  .kbd{
+    display:inline-block; min-width:22px; text-align:center;
+    padding:1px 8px; margin:0 2px;
+    font-family:"SFMono-Regular",Consolas,Menlo,monospace; font-size:13px;
+    color:var(--ink-0); background:linear-gradient(180deg,#f3e6c6,#d9b877);
+    border-radius:6px; box-shadow:0 1px 0 #8a6f3e; letter-spacing:1px;
+  }
+  table{ width:100%; border-collapse:collapse; margin:10px 0; }
+  th,td{ text-align:left; padding:9px 12px; border-bottom:1px solid var(--hair); color:var(--paper-soft);}
+  th{ color:var(--gold); font-weight:600; font-size:14px; letter-spacing:1px;}
+  .tip{ background:rgba(217,184,119,.08); border:1px solid var(--hair); border-radius:10px; padding:14px 18px; margin:16px 0; color:var(--paper-soft);}
+  .tip b{ color:var(--gold); }
+  .foot{ text-align:center; margin-top:34px; color:var(--gold-soft); font-size:13px; letter-spacing:2px;}
+  .brand{ font-style:italic; color:var(--gold); }
+  @media print{
+    body{ background:#fff; color:#222; padding:0;}
+    .sheet{ box-shadow:none; border:none; background:#fff; max-width:none; padding:0 8px;}
+    h1,h2,.gold,.sub,.foot,.brand{ color:#8a6f1e !important; }
+    p,li,td,th{ color:#333 !important; }
+    .rule::after{ animation:none; display:none; }
+    .rule{ background:#bbb; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <h1>圣经提词器</h1>
+  <div class="sub">使用说明书 · 版本 1.0</div>
+  <div class="rule"></div>
+
+  <h2>一、软件简介</h2>
+  <p class="lead">这是一款为讲道、聚会、教学等场景设计的<strong>中英双语圣经投影提词器</strong>。界面简洁、字号大、便于在投影或大屏上清晰展示经文，支持中文（和合本）与英文（KJV）一键切换。</p>
+
+  <h2>二、运行环境</h2>
+  <ul>
+    <li><b>操作系统</b>：Windows 10 / Windows 11</li>
+    <li><b>运行库</b>：需系统自带「Microsoft WebView2 运行时」（Win10/11 绝大多数已自带）</li>
+    <li><b>网络</b>：<b>完全离线，无需联网</b>，断网也可正常使用</li>
+    <li><b>安装</b>：<b>无需安装</b>，双击即可打开</li>
+  </ul>
+  <div class="tip">若双击后提示缺少 WebView2 运行时，请到微软官网下载安装「Microsoft WebView2 Runtime（Evergreen 版）」即可，过程约一分钟。</div>
+
+  <h2>三、开始使用</h2>
+  <ul>
+    <li>将 <span class="kbd">圣经提词器_v1.0.exe</span> 复制到任意位置（桌面、U 盘均可）。</li>
+    <li><b>双击</b>该文件，稍候片刻即进入主界面，默认定位在《创世记》开头。</li>
+    <li>如需快速跳到某卷某章某节，点击屏幕<b>左上角的十字架图标</b>打开目录。</li>
+  </ul>
+
+  <h2>四、操作快捷键</h2>
+  <table>
+    <tr><th>操作</th><th>按键 / 方式</th></tr>
+    <tr><td>翻节（上一节 / 下一节）</td><td><span class="kbd">←</span> <span class="kbd">→</span></td></tr>
+    <tr><td>翻章（上一章 / 下一章）</td><td><span class="kbd">↑</span> <span class="kbd">↓</span></td></tr>
+    <tr><td>中文 / 英文 切换</td><td><span class="kbd">L</span> &nbsp;或在目录面板右上角点击语言胶囊</td></tr>
+    <tr><td>打开目录</td><td><span class="kbd">T</span> &nbsp;或点击左上角十字架图标</td></tr>
+    <tr><td>关闭目录</td><td><span class="kbd">Esc</span></td></tr>
+  </table>
+  <p class="tip">切换经文时画面会有约 0.5 秒的柔和渐变过渡，方便投影时自然换节、不突兀。</p>
+
+  <h2>五、目录结构</h2>
+  <p>目录按 <b>旧约 / 新约 → 分类 → 书卷 → 章 → 节</b> 三级分组，逐级展开即可精确定位到任意一节，适合快速跳转长途经文。</p>
+
+  <h2>六、常见问题</h2>
+  <ul>
+    <li><b>需要联网吗？</b> 不需要。所有经文已内置，断网也能用。</li>
+    <li><b>可以拷给别的电脑用吗？</b> 可以。直接把 .exe 文件复制过去即可，不依赖任何额外文件。</li>
+    <li><b>打开后是黑屏 / 没反应？</b> 多半是缺少 WebView2 运行时，按第二节安装即可。</li>
+    <li><b>支持 Mac 或手机吗？</b> 本版本仅支持 Windows，暂不支持其他平台。</li>
+  </ul>
+
+  <div class="foot">© HongBing &nbsp;·&nbsp; 完全离线 · 双击即用</div>
+</div>
+</body>
+</html>
