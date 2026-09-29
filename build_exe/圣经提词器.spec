@@ -30,7 +30,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='圣经提词器_v1.0',
+    name='bible-teleprompter_v1.0',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

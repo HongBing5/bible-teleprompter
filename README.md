@@ -27,7 +27,7 @@ Bible\
     ├── version_info.txt        ← exe 版本信息（HongBing / © HongBing / 1.0.0.0）
     ├── 重新打包.bat            ← 改完 HTML 后双击即重出 exe（Windows 双击运行）
     └── dist\
-        └── 圣经提词器_v1.0.exe ← 【软件成品，发给客户】
+        └── bible-teleprompter_v1.0.exe ← 【软件成品，发给客户】（ASCII 名，避免 GitHub 附件中文被吞）
 ```
 
 > 关键约定：**根目录 = 源码与交付物（给人看/发给客户）；`build_exe/` = 仅用于重建 exe 的打包工程，不必发给客户。**
@@ -37,7 +37,7 @@ Bible\
 
 ## 发给客户的物料
 
-1. `build_exe/dist/圣经提词器_v1.0.exe` — 软件本体，双击即用、无需安装、无需联网。
+1. `build_exe/dist/bible-teleprompter_v1.0.exe` — 软件本体，双击即用、无需安装、无需联网。
 2. `圣经提词器-使用说明书.pdf` - 使用说明（白底黑字、中文字体内嵌，任意 PDF 阅读器可开）。
 
 > 极少数精简版 / 老系统若双击报错，是缺 WebView2 运行时，让客户装一下「Microsoft WebView2 Runtime（Evergreen）」即可。Win10/11 绝大多数自带。
@@ -60,21 +60,32 @@ Bible\
 
 1. 编辑根目录的 `圣经提词器.html`（界面、文案、版本号等）。
 2. 双击 `build_exe/重新打包.bat`。
-3. 新 exe 生成在 `build_exe/dist/圣经提词器_v1.0.exe`，会自动弹出资源管理器定位。
+3. 新 exe 生成在 `build_exe/dist/bible-teleprompter_v1.0.exe`，会自动弹出资源管理器定位。
 
 > 注意：打包时 `圣经提词器.spec` 会直接读取**上级根目录**的 `圣经提词器.html`，`build_exe/` 下**不再保留重复拷贝**，请始终改根目录那份。
 
 ---
 
-## 如何发布更新（让用户自行下载）
+## 如何发布更新（发版标准流程）
 
-1. 把 `version.json` 里的 `version` 改成新版本号（需大于用户手里的版本），`url` 填你的下载页，提交到 GitHub 仓库根目录。
-2. 把新 exe 上传到 GitHub **Releases**（标记为 latest）。
-3. 把 `圣经提词器.html` 里的 `APP_VERSION` 也改成同一新号，重新打包（否则「已看过」标记不会轮换，会重复提醒）。
+每次要发新版本，按以下顺序操作，**缺一不可**：
+
+1. **改源码版本号**：在根目录 `圣经提词器.html` 里把 `APP_VERSION` 改成新号（如 `'1.1.0'`），按需更新功能。
+2. **重新打包 exe**：双击 `build_exe/重新打包.bat`，新 exe 生成在 `build_exe/dist/bible-teleprompter_v1.0.exe`。
+3. **改版本文件**：把仓库根目录 `version.json` 的 `version` 也改成同一新号（必须 > 用户手里旧版的 `APP_VERSION`，否则不会提示更新），`url` 保持下载页地址。
+4. **提交代码**：`git add` 相关文件（`圣经提词器.html`、`version.json` 等）→ `git commit` → `git push origin main`。注意 exe 本身不进仓库，走 Releases 分发。
+5. **发 GitHub Release**：
+   - 仓库页 → **Releases** → **Draft a new release**
+   - Tag 填 `v1.1.0`（与版本号一致），Title 填 `圣经提词器 v1.1.0`
+   - ✅ 勾选 **Set as the latest release**
+   - 把新 exe 拖进附件区上传
+   - 点 **Publish release**
+
+> ⚠️ **附件文件名必须用英文名（ASCII）**：GitHub 的 Release 上传会把中文文件名直接吞掉——上传 `圣经提词器_v1.0.0.exe` 会变成 `_v1.0.0.exe`，用户下载看到的是一串不知所云的下划线名。因此构建产物已统一命名为 `bible-teleprompter_v1.0.0.exe`（纯英文+数字），上传后名称保持不变，用户下载不会有乱码。
 
 用户侧：软件里签名「© Design by HongBing」检测到有新版时会轻轻闪烁，点一下即用浏览器打开下载页；看过一次后该版本不再闪。断网 / 取不到版本信息时完全静默，不影响离线使用。
 
-> 待替换的地址（目前是占位）：`圣经提词器.html` 中的 `UPDATE_INFO_URL`（读 version.json）与 `UPDATE_FALLBACK_URL`（下载页）。
+> 更新地址已配置为真实仓库：`圣经提词器.html` 中的 `UPDATE_INFO_URL` 读 `raw.githubusercontent.com/HongBing5/bible-teleprompter/main/version.json`，`UPDATE_FALLBACK_URL` 跳 `github.com/HongBing5/bible-teleprompter/releases/latest`，无需再改。
 
 ---
 
