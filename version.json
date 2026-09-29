@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "url": "https://github.com/HongBing5/bible-teleprompter/releases/latest",
-  "note": "圣经提词器 v1.0.0 首个正式版发布"
+  "note": "目录随窗口自适应缩放；精简目录冗余文案"
 }

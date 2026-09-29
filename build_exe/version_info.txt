@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 VSVersionInfo(
     ffi=FixedFileInfo(
-        filevers=(1, 0, 0, 0),
-        prodvers=(1, 0, 0, 0),
+        filevers=(1, 1, 0, 0),
+        prodvers=(1, 1, 0, 0),
         mask=0x3f,
         flags=0x0,
         OS=0x40004,
@@ -17,12 +17,12 @@ VSVersionInfo(
                 [
                     StringStruct(u'CompanyName', u'HongBing'),
                     StringStruct(u'FileDescription', u'圣经提词器 — 中英双语圣经投影提词器'),
-                    StringStruct(u'FileVersion', u'1.0.0.0'),
+                    StringStruct(u'FileVersion', u'1.1.0.0'),
                     StringStruct(u'InternalName', u'圣经提词器'),
                     StringStruct(u'LegalCopyright', u'© HongBing'),
-                    StringStruct(u'OriginalFilename', u'圣经提词器_v1.0.exe'),
+                    StringStruct(u'OriginalFilename', u'bible-teleprompter_v1.1.0.exe'),
                     StringStruct(u'ProductName', u'圣经提词器'),
-                    StringStruct(u'ProductVersion', u'1.0.0.0'),
+                    StringStruct(u'ProductVersion', u'1.1.0.0'),
                     StringStruct(u'Comments', u'完全离线，双击即用'),
                 ],
             ),
