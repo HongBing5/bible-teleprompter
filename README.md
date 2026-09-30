@@ -21,7 +21,7 @@ Bible\
 ├── README.md                   ← 本文件
 └── build_exe\                  ← 【纯打包工程，不发给客户】
     ├── app_main.py             ← pywebview 壳（把 HTML 写到临时文件用 file:// 加载，已修黑屏）
-    ├── 圣经提词器.spec         ← PyInstaller 配置（直接读上级的源码 HTML，不在 build_exe 留重复拷贝）
+    ├── bible-teleprompter.spec ← PyInstaller 配置（直接读上级的源码 HTML，不在 build_exe 留重复拷贝）
     ├── app.ico                 ← 图标（由 logo.png 生成）
     ├── logo.png                ← 图标源文件（已 base64 内联进 HTML，运行不再引用，仅留作将来改图标）
     ├── version_info.txt        ← exe 版本信息（HongBing / © HongBing / 1.2.0.0）
@@ -62,7 +62,7 @@ Bible\
 2. 双击 `build_exe/重新打包.bat`。
 3. 新 exe 生成在 `build_exe/dist/bible-teleprompter_v1.2.0.exe`，会自动弹出资源管理器定位。
 
-> 注意：打包时 `圣经提词器.spec` 会直接读取**上级根目录**的 `圣经提词器.html`，`build_exe/` 下**不再保留重复拷贝**，请始终改根目录那份。
+> 注意：打包时 `bible-teleprompter.spec` 会直接读取**上级根目录**的 `圣经提词器.html`，`build_exe/` 下**不再保留重复拷贝**，请始终改根目录那份。
 
 ---
 
@@ -86,6 +86,23 @@ Bible\
 6. **验证更新链路**：用旧版 exe 打开 → 应看到署名红点呼吸闪烁 → 点红点跳 `releases/latest` 下载页，即更新提醒生效。
 
 > 更新地址已配置为真实仓库：`圣经提词器.html` 中的 `UPDATE_INFO_URL` 读 `raw.githubusercontent.com/HongBing5/bible-teleprompter/main/version.json`，`UPDATE_FALLBACK_URL` 跳 `github.com/HongBing5/bible-teleprompter/releases/latest`，无需再改。
+
+---
+
+### 升版本时必改的 6 处（版本号变更清单）
+
+每次从旧版本升到新版本（如 v1.1.0 → v1.2.0），下面 6 处版本号必须同步改，漏一处都会导致更新提示或文件名对不上：
+
+| # | 文件 | 变量 / 字段 | 改什么 |
+|---|------|------------|--------|
+| 1 | `圣经提词器.html`（约第 1009 行） | `const APP_VERSION` | `'旧号'` → `'新号'`（如 `'1.2.0'`） |
+| 2 | `version.json`（第 2 行） | `"version"` | `"旧号"` → `"新号"` |
+| 3 | `build_exe/bible-teleprompter.spec`（第 33 行） | `name=` | `bible-teleprompter_旧号` → `bible-teleprompter_新号` |
+| 4 | `build_exe/version_info.txt`（第 4/5/20/23/25 行） | `filevers`/`prodvers`、`FileVersion`、`OriginalFilename`、`ProductVersion` | `旧号.0` → `新号.0`，文件名同步 |
+| 5 | `build_exe/重新打包.bat`（第 4/7 行） | `taskkill` / `if exist` 路径 | 旧 exe 名 → `bible-teleprompter_新号.exe`（bat 里别写中文 exe 名，否则可能找不到文件） |
+| 6 | `README.md` | 版本号与 exe 文件名 | 全文 `旧号` / `v旧号.exe` → `新号` / `v新号.exe` |
+
+> 改完这 6 处，再走上面的「发版标准流程」。
 
 ---
 
