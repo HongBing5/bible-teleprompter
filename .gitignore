@@ -4,6 +4,9 @@ build_exe/build/
 # 打包产物：exe 通过 GitHub Releases 分发，不进仓库
 build_exe/dist/
 
+# macOS 图标：由 make_icns.py 从 logo.png 生成，无需入库
+build_exe/app.icns
+
 # Python 缓存
 __pycache__/
 *.pyc

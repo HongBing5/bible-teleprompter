@@ -8,9 +8,26 @@ import webview
 
 
 def resource_path(rel):
-    """打包后资源在 sys._MEIPASS；开发模式先找脚本同目录，再回退到上级（项目根）。"""
-    if getattr(sys, "_MEIPASS", None):
-        return os.path.join(sys._MEIPASS, rel)
+    """定位打包后的资源文件。
+
+    - Windows onefile：资源在 sys._MEIPASS（临时解压目录），直接拼即可。
+    - macOS .app：PyInstaller 把资源放 Contents/Frameworks，但不同版本布局有差异，
+      因此逐个候选目录探测，找不到再退回 sys._MEIPASS 本身（让报错信息更明确）。
+    - 开发模式：先找脚本同目录，再回退到上级（项目根）。
+    """
+    meipass = getattr(sys, "_MEIPASS", None)
+    if meipass:
+        candidates = [
+            os.path.join(meipass, rel),                          # Windows / macOS 常规
+            os.path.join(meipass, "Resources", rel),             # macOS bundle 资源目录
+            os.path.join(meipass, os.pardir, "Resources", rel),  # macOS Contents/Resources
+            os.path.join(meipass, os.pardir, rel),
+        ]
+        for cand in candidates:
+            if os.path.exists(cand):
+                return cand
+        return candidates[0]
+
     here = os.path.dirname(os.path.abspath(__file__))
     cand = os.path.join(here, rel)
     if os.path.exists(cand):

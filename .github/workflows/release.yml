@@ -1,0 +1,122 @@
+# ============================================================
+#  圣经提词器 · 云端打包（Windows .exe + macOS .app）
+#  触发方式：
+#    1) 打 tag 并推送  →  自动构建两个平台并发布到 GitHub Release
+#         git tag v1.2.1
+#         git push --tags
+#    2) Actions 页手动 Run workflow  →  只出 Artifacts 供自测，不发 Release
+#
+#  为什么走云端：Windows 上无法交叉编译出 macOS 的 .app，
+#  必须借 GitHub 提供的云 Mac 机器（macos-latest）来打包。
+#
+#  注意：未签名的 exe / app 首次打开会被系统拦截
+#        （Windows SmartScreen / macOS Gatekeeper），属正常现象，
+#        按提示「仍要运行」或「右键 → 打开」即可。
+# ============================================================
+name: 发布新版本（打包 exe + app）
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+# 关键：不加这行，上传 Release 会报
+# "Resource not accessible by integration"（默认令牌是只读的）
+permissions:
+  contents: write
+
+# 关键：GitHub 的 Windows 机器控制台是 cp1252，
+# 脚本里任何中文 print 都会 UnicodeEncodeError 直接让构建失败。
+env:
+  PYTHONUTF8: "1"
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  # ---------------- Windows .exe ----------------
+  build-win:
+    name: 构建 Windows .exe
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pywebview pythonnet clr_loader pyinstaller pillow
+
+      # version_info.txt 由 version.json 派生，保证 exe 属性里的版本号不会漏改
+      - name: 同步版本号到 version_info.txt
+        run: python build_exe/make_version_info.py
+
+      - name: 打包 exe
+        working-directory: build_exe
+        run: python -m PyInstaller bible-teleprompter.spec --noconfirm
+
+      - name: 整理产物名
+        run: |
+          $ver = (ConvertFrom-Json (Get-Content version.json -Raw)).version
+          Copy-Item "build_exe/dist/bible-teleprompter_v$ver.exe" "bible-teleprompter_v$ver.exe" -Force
+          Get-ChildItem "bible-teleprompter_v$ver.exe" | Select-Object Name, Length
+        shell: pwsh
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: bible-teleprompter-windows
+          path: bible-teleprompter_v*.exe
+
+  # ---------------- macOS .app ----------------
+  build-mac:
+    name: 构建 macOS .app
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: 安装依赖
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pywebview pyobjc pyinstaller pillow
+
+      - name: 打包 .app
+        run: bash build_exe/build_mac.sh
+
+      - name: 压缩成 zip 并带上版本号
+        run: |
+          ver=$(python3 -c "import json;print(json.load(open('version.json'))['version'])")
+          echo "版本号: $ver"
+          ditto -c -k --keepParent "build_exe/dist/圣经提词器.app" "bible-teleprompter_v${ver}-macOS.zip"
+          ls -la "bible-teleprompter_v${ver}-macOS.zip"
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: bible-teleprompter-macos
+          path: bible-teleprompter_v*-macOS.zip
+
+  # ---------------- 汇总发版 ----------------
+  # 两个平台都构建好后，由这一个 job 统一下载产物、创建 Release，
+  # 避免 win / mac 两个 job 同时建 Release 互相抢（422 Already exists）
+  release:
+    name: 发布 Release
+    needs: [build-win, build-mac]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: 下载全部构建产物
+        uses: actions/download-artifact@v4
+        with:
+          path: release-files
+          merge-multiple: true
+
+      - name: 创建 Release 并上传
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-files/*
+          generate_release_notes: true
