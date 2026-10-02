@@ -102,7 +102,7 @@ git push origin main --tags
 
 ## 如何发布更新（发版检查清单）
 
-### 第 1 步：改版本号（现在只需 3 处，比之前少）
+### 第 1 步：改版本号（只需 3 处）
 
 `version.json` 是**唯一真源**，`spec` 的 exe 名、`version_info.txt`、bat 的产物定位都已改为自动派生，不用再手改：
 
