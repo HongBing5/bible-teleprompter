@@ -2,8 +2,8 @@
 #  圣经提词器 · 云端打包（Windows .exe + macOS .app）
 #  触发方式：
 #    1) 打 tag 并推送  →  自动构建两个平台并发布到 GitHub Release
-#         git tag v1.2.1
-#         git push --tags
+#         git tag v1.3.0
+#         git push origin main --tags
 #    2) Actions 页手动 Run workflow  →  只出 Artifacts 供自测，不发 Release
 #
 #  为什么走云端：Windows 上无法交叉编译出 macOS 的 .app，
@@ -120,3 +120,30 @@ jobs:
         with:
           files: release-files/*
           generate_release_notes: true
+          # body 会被 GitHub 放在「自动生成的 commit 列表」之前，
+          # 所以这里写面向用户的说明，技术细节交给下面的自动生成部分。
+          # 版本号用 github.ref_name（= tag 名，如 v1.3.0）自动填充，无需手改。
+          body: |
+            ## 本次更新
+
+            - **新增 macOS 版本**：Mac 用户也可以直接下载安装使用了
+            - 修复 Mac 上目录排版异常（章节按钮不再各占一整行）
+            - 目录面板随窗口大小自适应缩放
+            - 新增皮肤主题切换：鎏金 / 醇棕 / 素白，选择后自动记忆
+            - 经文字重与字间距优化，长时间阅读更舒适
+            - 更新提醒改为署名右上角红点呼吸提示，不影响阅读
+            - 目录快捷键改为按 T 开关（再按一次 T 即可关闭，Esc 同样有效）
+
+            ## 下载说明
+
+            | 系统 | 下载文件 | 使用方式 |
+            | --- | --- | --- |
+            | Windows 10/11 | `bible-teleprompter_${{ github.ref_name }}.exe` | 双击即用，无需安装 |
+            | macOS（Apple 芯片 M 系列） | `bible-teleprompter_${{ github.ref_name }}-macOS.zip` | 解压后把 app 拖进「应用程序」 |
+
+            > ⚠️ **Mac 首次打开**：软件未做苹果开发者签名，系统会提示「无法验证开发者」。
+            > 请**右键点击 app → 打开**，确认一次后即可正常双击启动。
+            > Windows 若出现 SmartScreen 提示，点「仍要运行」即可。
+            > 两平台软件均**无需联网、无需安装**，打开即可使用。
+
+            使用中遇到任何问题，欢迎在 Issues 里反馈。
