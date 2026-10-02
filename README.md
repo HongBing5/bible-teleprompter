@@ -23,6 +23,7 @@ Bible\
 ├── version.json                ← 【版本号唯一真源】更新检测 + 打包命名都读它
 ├── .gitattributes              ← 强制 *.sh 用 LF 换行（CRLF 会让 Mac 的 bash 报错）
 ├── .github\workflows\release.yml ← 云端打包（Windows exe + macOS app，打 tag 自动发版）
+├── assets\wechat-donate.png     ← README 里引用的赞赏码图片（提交时别漏 git add assets/）
 └── build_exe\                  ← 【纯打包工程，不发给用户】
     ├── app_main.py             ← pywebview 壳（把 HTML 写到临时文件用 file:// 加载，已修黑屏）
     ├── bible-teleprompter.spec ← Windows 打包配置（版本号自动读 version.json）
@@ -48,7 +49,7 @@ Bible\
 | ← → | 上一节 / 下一节 |
 | ↑ ↓ | 上一章 / 下一章 |
 | L | 中文 / 英文 切换 |
-| T 或点左上 logo | 打开目录（旧约/新约 → 分类 → 书卷 → 章 → 节） |
+| T 或点左上 logo | 打开 / 关闭目录（开关式，再按一次 T 即关闭） |
 | Esc | 关闭目录 |
 
 ---
@@ -82,10 +83,12 @@ Windows 电脑打不出 macOS 的 `.app`，所以 Mac 版走 **GitHub Actions �
 
 ```bash
 git tag v1.3.0      # 版本号与 version.json 保持一致
-git push --tags
+git push origin main --tags
 ```
 
-推上去后 Actions 自动：装依赖 → 生成图标 → 打 Windows exe → 打 macOS app → 压 zip → **自动创建 Release 并上传两个附件**（`generate_release_notes: true` 会自动生成更新说明）。
+推上去后 Actions 自动：装依赖 → 生成图标 → 打 Windows exe → 打 macOS app → 压 zip → **自动创建 Release 并上传两个附件**。
+
+**Release 描述不用你写**：`.github/workflows/release.yml` 里配了 `generate_release_notes: true` 加一段 `body` 模板，GitHub 会自动拼成「用户视角更新说明 + 自动生成的 commit 列表」。模板里的版本号用 `${{ github.ref_name }}` 自动填充，发新版不用改；若想调整文案，改 workflow 里那段 `body:` 即可。
 
 **只想自测、不发版**：去仓库 **Actions** 页选「发布新版本（打包 exe + app）」→ **Run workflow** → 构建完在页面底部 `Artifacts` 下载两份产物。
 
@@ -145,7 +148,8 @@ git push origin main --tags
 - **`.sh` 脚本必须 LF 换行**：Windows 默认会把检出文件转成 CRLF，导致云 Mac 执行 `build_mac.sh` 报 `\r: command not found`。已用根目录 `.gitattributes` 强制 `*.sh text eol=lf`。
 - **macOS 不要加 `--collect-all webview`**：pywebview 按平台动态选后端，`--collect-all` 会把 Windows 专有依赖（pythonnet 等）一起收进来，在 Mac 上容易失败。只加 `--hidden-import webview.platforms.cocoa` 即可。
 - **Windows runner 控制台是 cp1252**：任何 Python `print` 中文都会 `UnicodeEncodeError` 直接让构建失败。workflow 里已设 `PYTHONUTF8=1`，且两个 make_*.py 的日志输出刻意用纯 ASCII。
-- **spec 里 `SPECPATH` 是目录不是文件路径**：不同 PyInstaller 版本行为有差异，`bible-teleprompter.spec` 里做了两种兼容（见过 `FileNotFoundError: version.json` 就是这坑）。
+- **macOS 系统 WebKit 不支持 CSS 容器查询 `cqw`**：pywebview 在 Mac 上用的是系统自带 WebKit，一旦不支持，`clamp(72px, 9cqw, 96px)` 这种整条声明会被丢弃 → `grid-template-columns` 失效 → 网格塌成单列（表现为目录按钮各占一整行）。**本项目已改用 JS 实测宽度写入 CSS 变量 `--pw`**，不要再引入 `cqw` / `container-type`。
+- **`remote rejected (failed)` 是 GitHub 侧瞬时故障**：不是本地网络或凭据问题，原样重试一次通常就成功（别急着去改 PAT 或代理配置）。
 
 ---
 
