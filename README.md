@@ -3,11 +3,11 @@
 一个**完全离线、双击即用**的中英双语圣经投影提词器。键盘翻节、目录定位、墨色金边视觉，经文与图标全部内嵌，断网也能运行。
 
 - 作者：HongBing（© HongBing）
-- 版本：1.2.0
+- 版本：1.3.0
 - 协议：MIT（详见 LICENSE）
 - 平台：
-  - **Windows 10/11** → `bible-teleprompter_v1.2.0.exe`（自带 WebView2 即可）
-  - **macOS** → `bible-teleprompter_v1.2.0-macOS.zip`（解压出 `圣经提词器.app`，走系统自带 WebKit）
+  - **Windows 10/11** → `bible-teleprompter_v1.3.0.exe`（自带 WebView2 即可）
+  - **macOS** → `bible-teleprompter_v1.3.0-macOS.zip`（解压出 `圣经提词器.app`，走系统自带 WebKit）
   - 二者都不需要用户装 Python；Mac 若不想装软件，直接双击 `圣经提词器.html` 也能用
 
 ---
@@ -33,7 +33,7 @@ Bible\
     ├── version_info.txt        ← exe 版本信息（由 make_version_info.py 自动生成）
     ├── 重新打包.bat            ← 改完 HTML 后双击即重出 exe（Windows 双击运行）
     └── dist\
-        └── bible-teleprompter_v1.2.0.exe ← 【软件成品，发给用户】（ASCII 名，避免 GitHub 附件中文被吞）
+        └── bible-teleprompter_v1.3.0.exe ← 【软件成品，发给用户】（ASCII 名，避免 GitHub 附件中文被吞）
 ```
 
 > 关键约定：**根目录 = 源码与交付物（给人看/发给用户）；`build_exe/` = 仅用于重建 exe 的打包工程，不必发给用户。**
@@ -59,7 +59,7 @@ Bible\
 
 1. 编辑根目录的 `圣经提词器.html`（界面、文案、版本号等）。
 2. 双击 `build_exe/重新打包.bat` —— 它会自动同步版本号、清理旧产物、打包并弹出资源管理器定位。
-3. 产物：`build_exe/dist/bible-teleprompter_v1.2.0.exe`。
+3. 产物：`build_exe/dist/bible-teleprompter_v1.3.0.exe`。
 
 > 注意：打包时 `bible-teleprompter.spec` 会直接读取**上级根目录**的 `圣经提词器.html`，`build_exe/` 下**不再保留重复拷贝**，请始终改根目录那份。
 
@@ -75,13 +75,13 @@ Windows 电脑打不出 macOS 的 `.app`，所以 Mac 版走 **GitHub Actions �
 
 | 平台 | 谁构建 | 产物 |
 |------|--------|------|
-| Windows | `windows-latest` 云机器 | `bible-teleprompter_v1.2.0.exe` |
-| macOS | `macos-latest` 云 Mac | `bible-teleprompter_v1.2.0-macOS.zip`（内含 `圣经提词器.app`） |
+| Windows | `windows-latest` 云机器 | `bible-teleprompter_v1.3.0.exe` |
+| macOS | `macos-latest` 云 Mac | `bible-teleprompter_v1.3.0-macOS.zip`（内含 `圣经提词器.app`） |
 
 **发布方式（打 tag 即全自动）**：
 
 ```bash
-git tag v1.2.0      # 版本号与 version.json 保持一致
+git tag v1.3.0      # 版本号与 version.json 保持一致
 git push --tags
 ```
 
@@ -116,12 +116,12 @@ git push --tags
 **方式 A · 云端自动（推荐）**：打 tag 推送，Actions 自动构建 **Windows exe + macOS app** 并直接建好 Release：
 
 ```bash
-git add . && git commit -m "feat(1.2.1): 说明这次改了什么"
-git tag v1.2.1        # 必须与 version.json 的 version 一致
+git add . && git commit -m "feat(1.3.0): 说明这次改了什么"
+git tag v1.3.0        # 必须与 version.json 的 version 一致
 git push origin main --tags
 ```
 
-**方式 B · 手动**：本地双击 `重新打包.bat` 出 exe，再去 Releases → Draft a new release → Tag `v1.2.1`、Title `圣经提词器 v1.2.1`、✅ Set as the latest release、拖入 exe（**ASCII 名**，中文名会被吞）、Publish。
+**方式 B · 手动**：本地双击 `重新打包.bat` 出 exe，再去 Releases → Draft a new release → Tag `v1.3.0`、Title `圣经提词器 v1.3.0`、✅ Set as the latest release、拖入 exe（**ASCII 名**，中文名会被吞）、Publish。
 
 > push 注意事项：
 > - 密码/令牌填 **PAT**，不是 GitHub 登录密码。

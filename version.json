@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "url": "https://github.com/HongBing5/bible-teleprompter/releases/latest",
-  "note": "新增皮肤主题切换（鎏金/醇棕/素白，可记忆）；目录随窗口自适应缩放；经文字重与字间距优化；更新提醒改为红点提示"
+  "note": "新增 macOS 版本（.app 客户端，云端打包）；修复 macOS 上目录网格塌成单列、按钮占满整行的问题；T 键改为开关，目录打开时再按一次即可关闭"
 }
